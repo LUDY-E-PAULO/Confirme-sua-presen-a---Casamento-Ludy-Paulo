@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Confirmação de Presença</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --dark: #0d0d0d;
+      --cream: #f5f0e8;
+      --accent: #7a5c1e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--cream);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fundo decorativo */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Bordas decorativas nos cantos */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 24px;
+      border: 1px solid rgba(201,168,76,0.25);
+      pointer-events: none;
+    }
+
+    .container {
+      text-align: center;
+      padding: 48px 40px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 1s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .ornament {
+      font-size: 13px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+      opacity: 0.8;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+
+    h1 span {
+      color: var(--gold);
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(245,240,232,0.6);
+      margin-bottom: 48px;
+      letter-spacing: 1px;
+    }
+
+    /* QR Code */
+    .qr-wrapper {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .qr-frame {
+      position: relative;
+      padding: 20px;
+      background: var(--cream);
+      border-radius: 6px;
+      box-shadow:
+        0 0 0 1px rgba(201,168,76,0.5),
+        0 0 40px rgba(201,168,76,0.15),
+        0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    /* Cantos dourados */
+    .qr-frame::before,
+    .qr-frame::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .qr-frame::before {
+      top: -4px; left: -4px;
+      border-width: 2px 0 0 2px;
+    }
+    .qr-frame::after {
+      bottom: -4px; right: -4px;
+      border-width: 0 2px 2px 0;
+    }
+
+    #qrcode canvas,
+    #qrcode img {
+      display: block;
+    }
+
+    .scan-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .scan-sub {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.45);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Link direto para mobile */
+    .direct-link {
+      margin-top: 36px;
+      display: inline-block;
+      padding: 14px 36px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.82rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .direct-link:hover {
+      background: var(--gold);
+      color: var(--dark);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="ornament">✦ &nbsp; Confirmação &nbsp; ✦</p>
+    <h1>Confirme sua<br/><span>Presença</span></h1>
+    <p class="subtitle">Escaneie o QR Code abaixo com seu celular</p>
+
+    <div class="qr-wrapper">
+      <div class="qr-frame">
+        <div id="qrcode"></div>
+      </div>
+      <p class="scan-label">Aponte a câmera</p>
+      <p class="scan-sub">ou acesse o link diretamente</p>
+    </div>
+
+    <br/>
+    <a class="direct-link" href="formulario.html">Acessar formulário →</a>
+  </div>
+
+  <script>
+    // Gera QR Code apontando para o formulário
+    // Substitua pela URL real quando hospedar o site
+    const url = window.location.origin + window.location.pathname.replace('index.html','') + 'formulario.html';
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: url,
+      width: 220,
+      height: 220,
+      colorDark: "#0d0d0d",
+      colorLight: "#f5f0e8",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
